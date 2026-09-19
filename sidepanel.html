@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>Jev Voice Browser</title>
+  <link rel="stylesheet" href="sidepanel.css">
+</head>
+<body>
+  <header>
+    <button id="mic" class="mic" title="音声入力 (Alt+Shift+V)">🎤</button>
+    <div class="status">
+      <div id="status">待機中</div>
+      <div id="interim" class="interim"></div>
+    </div>
+  </header>
+
+  <div class="toggles">
+    <label><input type="checkbox" id="continuous"> 聞き続ける</label>
+    <label><input type="checkbox" id="badges"> 番号を表示</label>
+    <a href="options.html" target="_blank">設定</a>
+  </div>
+
+  <form id="textForm">
+    <input id="textInput" placeholder="文字でも指示できます(例: 下にスクロール)" autocomplete="off">
+  </form>
+
+  <p id="notice" class="notice" hidden></p>
+
+  <ol id="log" class="log"></ol>
+
+  <details class="help">
+    <summary>話し方の例</summary>
+    <ul>
+      <li>「スクロールして」「もっと下」「一番上へ」</li>
+      <li>「ここクリックして」(マウスを置いた場所)</li>
+      <li>「ログインを押して」「5番をクリック」</li>
+      <li>「検索欄に東京の天気と入力して検索」</li>
+      <li>「猫の飼い方を検索して」「戻って」「このタブを閉じて」</li>
+      <li>「ストップ」「止めて」で聞き続けるモードを終了</li>
+    </ul>
+  </details>
+
+  <script type="module" src="sidepanel.js"></script>
+</body>
+</html>

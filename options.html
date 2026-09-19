@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>Jev Voice Browser 設定</title>
+  <link rel="stylesheet" href="sidepanel.css">
+  <style>
+    body { max-width: 560px; margin: 24px auto; padding: 0 16px; }
+    label { display: block; margin: 14px 0 4px; font-weight: 600; }
+    input, select { width: 100%; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--card); color: var(--fg); font: inherit; }
+    .hint { color: var(--muted); font-size: 12px; margin: 4px 0 0; }
+    .row { display: flex; gap: 8px; margin-top: 18px; }
+    button { padding: 8px 14px; border-radius: 8px; border: 1px solid var(--line); background: var(--card); color: var(--fg); cursor: pointer; font: inherit; }
+    button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+    #msg { margin-top: 12px; overflow-wrap: anywhere; }
+  </style>
+</head>
+<body>
+  <h1>Jev Voice Browser 設定</h1>
+
+  <label for="apiKey">TypeSafe API キー</label>
+  <input id="apiKey" type="password" autocomplete="off" placeholder="ts-...">
+  <p class="hint">キーはこのブラウザ内 (chrome.storage.local) にのみ保存され、api.typesafe.ai への問い合わせにだけ使います。</p>
+
+  <label for="model">モデル</label>
+  <select id="model"><option value="jev-latest">jev-latest</option></select>
+  <p class="hint">「接続テスト」でアカウントで使えるモデル一覧を読み込みます。</p>
+
+  <label for="lang">音声認識の言語</label>
+  <select id="lang">
+    <option value="ja-JP">日本語</option>
+    <option value="en-US">English (US)</option>
+  </select>
+
+  <label for="minConfidence">実行する最低確信度</label>
+  <input id="minConfidence" type="number" min="0" max="1" step="0.05">
+  <p class="hint">Jev の「どの操作か」の確信度がこれ未満なら実行せずに聞き直します(0〜1)。</p>
+
+  <div class="row">
+    <button id="save" class="primary">保存</button>
+    <button id="test">接続テスト</button>
+    <button id="mic">マイクを許可</button>
+  </div>
+  <div id="msg"></div>
+
+  <script src="options.js"></script>
+</body>
+</html>
