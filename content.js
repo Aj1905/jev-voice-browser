@@ -44,16 +44,27 @@
     return !hit || hit === el || el.contains(hit) || hit.contains(el);
   }
 
+  // Never collect existing field contents, including revealed passwords, OTPs,
+  // card details and text editors. Containers can include an editor's text too.
+  function labelText(el) {
+    if (!el) return '';
+    if (el.closest?.('input, textarea, select, [contenteditable]:not([contenteditable="false"]), [role="textbox"], [role="searchbox"]')) return '';
+    if (el.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT'].includes(el.tagName) ||
+        ['textbox', 'searchbox'].includes(el.getAttribute?.('role'))) return '';
+    if (el.querySelector?.('input, textarea, select, [contenteditable]:not([contenteditable="false"]), [role="textbox"], [role="searchbox"]')) return '';
+    return el.innerText || '';
+  }
+
   function labelOf(el) {
     const aria = el.getAttribute('aria-label') || el.getAttribute('aria-labelledby') &&
-      document.getElementById(el.getAttribute('aria-labelledby'))?.innerText;
+      labelText(document.getElementById(el.getAttribute('aria-labelledby')));
     if (aria) return clip(aria);
-    if (el.labels && el.labels[0]) return clip(el.labels[0].innerText);
-    const text = el.innerText;
+    if (el.labels && el.labels[0]) return clip(labelText(el.labels[0]));
+    const text = labelText(el);
     if (text && text.trim()) return clip(text);
     const alt = el.querySelector?.('img[alt]')?.getAttribute('alt');
     return clip(el.getAttribute('placeholder') || el.getAttribute('title') || alt ||
-      el.getAttribute('name') || el.value || '');
+      el.getAttribute('name') || '');
   }
 
   function kindOf(el) {
@@ -89,7 +100,6 @@
     if (el.tagName === 'A' && el.href) {
       try { const u = new URL(el.href); d += ` → ${u.host}${clip(u.pathname, 40)}`; } catch {}
     }
-    if (isEditable(el) && el.value) d += ` (現在の値: ${clip(el.value, 30)})`;
     if (el === document.activeElement) d += ' [フォーカス中]';
     return d;
   }
@@ -115,7 +125,7 @@
     const hit = document.elementFromPoint(pointer.x, pointer.y);
     if (!hit) return { index: -1, text: '' };
     const i = elements.findIndex((el) => el === hit || el.contains(hit));
-    return { index: i, text: i >= 0 ? describe(elements[i]) : clip(hit.innerText || hit.tagName, 60) };
+    return { index: i, text: i >= 0 ? describe(elements[i]) : clip(labelOf(hit) || kindOf(hit), 60) };
   }
 
   // ---------- 番号バッジ ----------
