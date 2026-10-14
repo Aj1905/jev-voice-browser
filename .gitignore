@@ -1,15 +1,25 @@
-# .gitignore — 3 節構成 (再現可能 / 秘密情報 / 端末固有)。ここに書いたものは端末間で同期されない。
+# .gitignore — 4 節構成。置き場が名前で分かるようにし、CLI で編集できるようにする。
+#   1. 再現可能   : ツールが固定パスに作るので動かせない。保管せず再生成する。手順は README に書く。
+#   2. _1password/: 秘密情報。正本は 1Password。手順は _1password/README.md
+#   3. _gdrive/   : 再現できないが追跡もしない作業物。正本は Google Drive。手順は _gdrive/README.md
+#   4. 端末固有   : OS・エディタが作る付随ファイル。
 # 大きいファイルは除外しない。data/ に置き、必要になった時点で `git lfs track "data/**"` で追跡する。
 
-# ---- 1. 再現可能: コマンドで作り直せるもの。再現手順は README に書く ----
+# ---- 1. 再現可能 ----
 # (なし。ビルド工程のない拡張機能)
 
-# ---- 2. 秘密情報: git に入れない。値は 1Password に置き、参照だけ .env.tpl に書く ----
+# ---- 2. 秘密情報: 正本は 1Password (op://dev/jev-voice-browser/KEY)。.env.tpl (追跡) から op inject で _1password/.env を作り、ルートの .env はそこへのリンク ----
+_1password/*
+!_1password/README.md
 .env
 .env.*
 !.env.tpl
 !.env.example
 !.env.*.example
 
-# ---- 3. 端末固有: OS・エディタが作る付随ファイル ----
+# ---- 3. 再現できないが追跡しない: 正本は Google Drive (rclone gdrive:repo-local/jev-voice-browser/) ----
+_gdrive/*
+!_gdrive/README.md
+
+# ---- 4. 端末固有 ----
 .DS_Store
